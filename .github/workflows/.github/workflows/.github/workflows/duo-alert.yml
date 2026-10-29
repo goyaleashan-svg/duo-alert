@@ -1,0 +1,21 @@
+   name: iPhone Duo stock alert
+
+   on:
+     schedule:
+       - cron: "*/5 * * * *"
+     workflow_dispatch:
+
+   jobs:
+     check:
+       runs-on: ubuntu-latest
+       timeout-minutes: 8
+       steps:
+         - uses: actions/checkout@v4
+         - uses: actions/setup-python@v5
+           with:
+             python-version: "3.12"
+         - name: Check Apple India pickup stock
+           env:
+             NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+             ROUNDS: "4"
+           run: python3 duo_stock_alert.py --once
